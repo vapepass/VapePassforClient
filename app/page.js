@@ -37,38 +37,37 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Header + Hero */}
-      <div className="bg-white">
-        <header className="bg-white">
-          <nav
-            className="flex items-center justify-between px-6 md:px-10 py-5 max-w-7xl mx-auto"
-            aria-label="Main navigation"
-          >
-            <Logo size={32} showText />
-            <div className="flex items-center gap-5">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#f0ebfd] text-brand-600">
-                <Sparkles size={12} aria-hidden="true" />
-                Coming Soon
-              </span>
-              <button
-                type="button"
-                onClick={openComingSoon}
-                className="text-sm font-medium text-ink hover:text-brand-600 transition-colors"
-              >
-                Sign In
-              </button>
-              <button
-                type="button"
-                onClick={openComingSoon}
-                className="inline-flex items-center justify-center px-[26px] py-3 text-[15px] font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-full transition-colors shadow-sm"
-              >
-                Get Started
-              </button>
-            </div>
-          </nav>
-        </header>
+      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-[#e5e5ec]">
+        <nav
+          className="flex items-center justify-between px-6 md:px-10 py-5 max-w-7xl mx-auto"
+          aria-label="Main navigation"
+        >
+          <Logo size={32} showText />
+          <div className="flex items-center gap-4">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#f0ebfd] text-brand-600">
+              <Sparkles size={11} aria-hidden="true" />
+              Coming Soon
+            </span>
+            <button
+              type="button"
+              onClick={openComingSoon}
+              className="text-[13px] font-medium text-ink hover:text-brand-600 transition-colors"
+            >
+              Sign In
+            </button>
+            <button
+              type="button"
+              onClick={openComingSoon}
+              className="inline-flex items-center justify-center px-5 py-2 text-sm font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-full transition-colors shadow-sm"
+            >
+              Get Started
+            </button>
+          </div>
+        </nav>
+      </header>
 
-        {/* Hero */}
+      {/* Hero */}
+      <div className="bg-white">
         <section className="max-w-4xl mx-auto px-6 pt-16 md:pt-20 pb-16 text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold mb-8 bg-[#f0ebfd] text-brand-600">
             <Star size={14} fill="#7c3aed" color="#7c3aed" aria-hidden="true" />
@@ -105,36 +104,37 @@ export default function Landing() {
 
       {/* Wallet preview + features intro */}
       <section className="bg-[#f9fafb] pt-4 pb-20 sm:pb-24">
-        <div className="max-w-md mx-auto px-6 mb-16 sm:mb-20">
+        <div className="max-w-[480px] mx-auto px-6 mb-16 sm:mb-20">
           <div
-            className="relative rounded-3xl p-8 sm:p-10 text-left overflow-hidden shadow-[0_24px_48px_rgba(91,33,182,0.18),0_8px_16px_rgba(91,33,182,0.08)]"
-            style={{ background: 'linear-gradient(145deg, #9f7aea 0%, #7c3aed 45%, #5b21b6 100%)' }}
+            className="relative rounded-[24px] p-7 text-left overflow-hidden shadow-[0_20px_50px_rgba(91,33,182,0.22),0_8px_24px_rgba(91,33,182,0.1)]"
+            style={{ background: 'linear-gradient(165deg, #9f7aea 0%, #7c3aed 50%, #6d28d9 100%)' }}
           >
-            <div className="absolute -top-16 -left-16 w-48 h-48 rounded-full bg-white/10" aria-hidden="true" />
-            <div className="absolute -bottom-12 -right-12 w-40 h-40 rounded-full bg-white/[0.07]" aria-hidden="true" />
-            <div className="absolute top-8 right-8 w-28 h-28 rounded-full bg-white/[0.06]" aria-hidden="true" />
+            <div className="absolute -bottom-20 -left-20 w-56 h-56 rounded-full bg-[#5b21b6]/35" aria-hidden="true" />
+            <div className="absolute -top-16 -right-16 w-48 h-48 rounded-full bg-white/10" aria-hidden="true" />
 
-            <div className="flex items-start justify-between mb-6 relative">
+            <div className="flex items-start justify-between mb-5 relative">
               <div>
-                <p className="text-white font-bold text-xl tracking-tight">Cloud Nine Vapes</p>
-                <p className="text-white/70 text-sm mt-0.5">VIP Loyalty Card</p>
+                <p className="text-white font-bold text-lg tracking-tight leading-snug">Cloud Nine Vapes</p>
+                <p className="text-white/60 text-[13px] mt-0.5 font-normal">VIP Loyalty Card</p>
               </div>
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-white bg-white/20">
-                <Gift size={13} aria-hidden="true" /> 1 reward
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-white bg-[#5b21b6]/45 backdrop-blur-sm">
+                <Gift size={12} aria-hidden="true" /> 1 reward
               </div>
             </div>
 
-            <div className="flex gap-2 mb-7 flex-wrap relative" aria-hidden="true">
+            <div className="flex justify-between mb-6 flex-nowrap relative" aria-hidden="true">
               {Array.from({ length: 10 }, (_, i) => (
                 <div
                   key={i}
                   className={[
-                    'w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0',
-                    i < 7 ? 'bg-white shadow-[0_0_14px_rgba(255,255,255,0.45)]' : 'bg-white/20',
+                    'w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0',
+                    i < 7
+                      ? 'bg-white shadow-[0_0_14px_rgba(255,255,255,0.5)]'
+                      : 'bg-[#4c1d95]/35',
                   ].join(' ')}
                 >
                   {i < 7 && (
-                    <Star size={15} fill="none" stroke="#7c3aed" strokeWidth={2.5} aria-hidden="true" />
+                    <Star size={13} fill="none" stroke="#7c3aed" strokeWidth={2.5} aria-hidden="true" />
                   )}
                 </div>
               ))}
@@ -142,10 +142,10 @@ export default function Landing() {
 
             <div className="flex items-end justify-between relative">
               <div>
-                <p className="text-white/70 text-sm">7 / 10 visits</p>
-                <p className="text-white font-bold text-lg mt-0.5">Alex Johnson</p>
+                <p className="text-white/60 text-[13px] font-normal">7 / 10 visits</p>
+                <p className="text-white font-bold text-lg mt-1 leading-snug">Alex Johnson</p>
               </div>
-              <div className="w-20 h-20 rounded-xl bg-white p-2 flex-shrink-0">
+              <div className="w-[72px] h-[72px] rounded-xl bg-white p-2 flex-shrink-0">
                 <svg viewBox="0 0 100 100" width="100%" height="100%" aria-hidden="true">
                   <rect x="5" y="5" width="30" height="30" rx="2" fill="none" stroke="black" strokeWidth="7" />
                   <rect x="14" y="14" width="12" height="12" fill="black" />
@@ -198,19 +198,19 @@ export default function Landing() {
       <div className="gradient-mesh">
 
       {/* How it works */}
-      <section className="py-20 sm:py-24 bg-[#f9fafb]">
+      <section className="py-24 sm:py-28 bg-[#f9fafb]">
         <div className="max-w-5xl mx-auto px-6 text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold text-[#111827] tracking-tight mb-14">
+          <h2 className="text-3xl sm:text-4xl font-bold text-[#111827] tracking-tight mb-16">
             How it works
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-14 md:gap-20">
             {steps.map(({ n, title, desc }) => (
-              <div key={n}>
-                <div className="w-16 h-16 rounded-2xl bg-brand-600 flex items-center justify-center mx-auto mb-5 font-bold text-xl text-white">
+              <div key={n} className="flex flex-col items-center">
+                <div className="w-14 h-14 rounded-xl bg-[#7c3aed] flex items-center justify-center mb-4 font-bold text-base text-white">
                   {n}
                 </div>
-                <h3 className="font-bold text-xl text-[#111827] mb-3 tracking-tight">{title}</h3>
-                <p className="text-[#6b7280] text-sm leading-relaxed max-w-xs mx-auto">{desc}</p>
+                <h3 className="font-bold text-lg text-[#111827] mb-2.5 tracking-tight">{title}</h3>
+                <p className="text-[#6b7280] text-sm leading-relaxed max-w-[210px]">{desc}</p>
               </div>
             ))}
           </div>
