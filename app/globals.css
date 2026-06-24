@@ -1,0 +1,212 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════════
+   VapePass Design System
+   Tokens: color, typography, spacing, radius, shadow, motion
+   ═══════════════════════════════════════════════════════════════ */
+
+@theme {
+  /* Brand */
+  --color-brand-50: #f5f3ff;
+  --color-brand-100: #ede9fe;
+  --color-brand-200: #ddd6fe;
+  --color-brand-300: #c4b5fd;
+  --color-brand-400: #a78bfa;
+  --color-brand-500: #8b5cf6;
+  --color-brand-600: #7c3aed;
+  --color-brand-700: #6d28d9;
+  --color-brand-800: #5b21b6;
+  --color-brand-900: #4c1d95;
+
+  /* Semantic */
+  --color-success-50: #ecfdf5;
+  --color-success-500: #10b981;
+  --color-success-600: #059669;
+  --color-warning-50: #fffbeb;
+  --color-warning-500: #f59e0b;
+  --color-warning-600: #d97706;
+  --color-danger-50: #fef2f2;
+  --color-danger-500: #ef4444;
+  --color-danger-600: #dc2626;
+  --color-info-500: #3b82f6;
+
+  /* Neutrals */
+  --color-ink: #0c0c12;
+  --color-body: #5c5c6d;
+  --color-muted: #9494a6;
+  --color-canvas: #f6f7fb;
+  --color-surface: #ffffff;
+  --color-line: #e8e9ef;
+  --color-line-subtle: #f0f1f5;
+
+  /* Typography */
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Spacing scale: 4, 8, 16, 24, 32, 48, 64 */
+  --spacing-1: 0.25rem;
+  --spacing-2: 0.5rem;
+  --spacing-4: 1rem;
+  --spacing-6: 1.5rem;
+  --spacing-8: 2rem;
+  --spacing-12: 3rem;
+  --spacing-16: 4rem;
+
+  /* Radius */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px rgba(12, 12, 18, 0.04);
+  --shadow-sm: 0 1px 3px rgba(12, 12, 18, 0.06), 0 1px 2px rgba(12, 12, 18, 0.04);
+  --shadow-md: 0 4px 12px rgba(12, 12, 18, 0.06), 0 2px 4px rgba(12, 12, 18, 0.04);
+  --shadow-lg: 0 12px 32px rgba(12, 12, 18, 0.08), 0 4px 8px rgba(12, 12, 18, 0.04);
+  --shadow-xl: 0 24px 48px rgba(12, 12, 18, 0.1);
+  --shadow-brand: 0 8px 24px rgba(124, 58, 237, 0.22);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
+
+  /* Animations */
+  --animate-fade-in: fade-in var(--duration-slow) var(--ease-out);
+  --animate-slide-up: slide-up var(--duration-slow) var(--ease-out);
+  --animate-slide-down: slide-down var(--duration-normal) var(--ease-out);
+  --animate-scale-in: scale-in var(--duration-normal) var(--ease-out);
+  --animate-shimmer: shimmer 1.5s infinite;
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes slide-down {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scale-in {
+    from { opacity: 0; transform: scale(0.96); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  @keyframes pulse-ring {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.05); }
+  }
+}
+
+/* CSS custom properties (runtime) */
+:root {
+  --brand: #7c3aed;
+  --brand-hover: #6d28d9;
+  --brand-subtle: #f0ebfd;
+  --focus-ring: 0 0 0 3px rgba(124, 58, 237, 0.2);
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+  --container-2xl: 1440px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+}
+
+/* Focus accessibility */
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #d4d4dc; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #b8b8c4; }
+
+/* Utility layers */
+@layer components {
+  .container-app {
+    width: 100%;
+    max-width: var(--container-xl);
+    margin-inline: auto;
+    padding-inline: var(--spacing-4);
+  }
+  @media (min-width: 768px) {
+    .container-app { padding-inline: var(--spacing-6); }
+  }
+  @media (min-width: 1024px) {
+    .container-app { padding-inline: var(--spacing-8); }
+  }
+
+  .gradient-brand {
+    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 50%, #6d28d9 100%);
+  }
+
+  .gradient-mesh {
+    background-color: var(--color-canvas);
+    background-image:
+      radial-gradient(ellipse 80% 60% at 50% -20%, rgba(124, 58, 237, 0.12), transparent),
+      radial-gradient(ellipse 50% 40% at 100% 0%, rgba(139, 92, 246, 0.08), transparent),
+      radial-gradient(ellipse 40% 30% at 0% 100%, rgba(124, 58, 237, 0.06), transparent);
+  }
+
+  .glass {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .grid-bg {
+    background-image:
+      linear-gradient(rgba(12, 12, 18, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(12, 12, 18, 0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
