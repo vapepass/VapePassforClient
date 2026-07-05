@@ -23,7 +23,7 @@ const initialForm = {
 function PricingField({ id, label, type = 'text', value, onChange, placeholder, showCalendar = false }) {
   return (
     <div>
-      <label htmlFor={id} className="block text-[13px] text-[#6b7280] mb-1.5">
+      <label htmlFor={id} className="block text-sm text-[#6b7280] mb-2">
         {label}
       </label>
       <div className="relative">
@@ -33,11 +33,11 @@ function PricingField({ id, label, type = 'text', value, onChange, placeholder, 
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className="w-full h-10 px-3.5 text-sm text-[#111827] bg-white border border-[#e5e7eb] rounded-lg placeholder:text-[#9ca3af] focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/15 transition-all"
+          className="w-full h-11 px-4 text-[15px] text-[#111827] bg-white border border-[#e5e7eb] rounded-lg placeholder:text-[#9ca3af] focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/15 transition-all"
         />
         {showCalendar && (
           <Calendar
-            size={15}
+            size={16}
             className="absolute right-3 top-1/2 -translate-y-1/2 text-[#9ca3af] pointer-events-none"
             aria-hidden="true"
           />
@@ -61,48 +61,48 @@ export default function PricingSection() {
   };
 
   return (
-    <section className="py-16 sm:py-20 bg-[#f9fafb]">
-      <div className="max-w-[580px] mx-auto px-6">
-        <div className="text-center mb-10">
+    <section className="py-20 sm:py-24 bg-[#f9fafb] font-sans">
+      <div className="max-w-[640px] mx-auto px-6">
+        <div className="text-center mb-12">
           <AnimateIn animation="slide-up">
-            <h2 className="text-[1.875rem] sm:text-[2.125rem] font-bold text-[#111827] tracking-tight mb-2.5">
+            <h2 className="text-[2rem] sm:text-[2.375rem] font-bold text-[#111827] tracking-tight mb-3">
               Simple pricing
             </h2>
           </AnimateIn>
           <AnimateIn animation="slide-up" delay={100}>
-            <p className="text-[#6b7280] text-base">One plan. Everything included.</p>
+            <p className="text-[#6b7280] text-base sm:text-lg">One plan. Everything included.</p>
           </AnimateIn>
         </div>
 
         <AnimateIn animation="scale-in" delay={200} duration={600}>
           <div className="rounded-2xl border border-brand-600 bg-white shadow-[0_6px_24px_rgba(124,58,237,0.1)] overflow-hidden">
-            <div className="bg-brand-600 text-white text-center py-6 px-6">
-              <div className="flex items-baseline justify-center gap-1">
-                <span className="text-[2.5rem] font-bold leading-none tracking-tight">$100</span>
-                <span className="text-base text-white/90 font-normal">/month</span>
+            <div className="bg-brand-600 text-white text-center py-7 px-7">
+              <div className="flex items-baseline justify-center gap-1.5">
+                <span className="text-[2.75rem] font-bold leading-none tracking-tight">$100</span>
+                <span className="text-lg text-white/90 font-normal">/month</span>
               </div>
-              <p className="text-[13px] text-white/90 mt-2.5">
+              <p className="text-sm text-white/90 mt-3">
                 AI Sommelier · Compliance Engine · Full Dashboard
               </p>
             </div>
 
-            <div className="px-7 py-6">
-              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
+            <div className="px-8 py-7">
+              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-7 gap-y-3.5">
                 {planFeatures.map((feature) => (
-                  <li key={feature} className="flex items-center gap-2.5 text-[14px] text-[#374151]">
-                    <Check size={15} className="text-brand-600 shrink-0" strokeWidth={2.5} aria-hidden="true" />
+                  <li key={feature} className="flex items-center gap-3 text-[15px] text-[#374151]">
+                    <Check size={16} className="text-brand-600 shrink-0" strokeWidth={2.5} aria-hidden="true" />
                     <span className="leading-snug">{feature}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            <form onSubmit={handleSubmit} className="border-t border-[#e8e9ef] px-7 py-6">
-              <h3 className="text-[15px] font-bold text-[#111827] mb-5 tracking-tight">
+            <form onSubmit={handleSubmit} className="border-t border-[#e8e9ef] px-8 py-7">
+              <h3 className="text-base font-bold text-[#111827] mb-5 tracking-tight">
                 Get started — fill out your info
               </h3>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                 <PricingField
                   id="storeName"
                   label="Store Name"
@@ -134,10 +134,10 @@ export default function PricingSection() {
 
               <button
                 type="submit"
-                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 text-[14px] font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-full transition-colors"
+                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 text-[15px] font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-full transition-colors"
               >
                 Get Started — $100/mo
-                <ArrowRight size={15} aria-hidden="true" />
+                <ArrowRight size={16} aria-hidden="true" />
               </button>
             </form>
           </div>

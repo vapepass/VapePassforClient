@@ -199,6 +199,67 @@ body {
       linear-gradient(90deg, rgba(12, 12, 18, 0.03) 1px, transparent 1px);
     background-size: 48px 48px;
   }
+
+  /* Platform engines — Inter typography (reference) */
+  .platform-heading {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+    color: #1a1a1a;
+  }
+
+  @media (min-width: 640px) {
+    .platform-heading {
+      font-size: 2.25rem;
+    }
+  }
+
+  .platform-subheading {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 1.125rem;
+    line-height: 1.6;
+    color: #5d5d7e;
+  }
+
+  @media (min-width: 640px) {
+    .platform-subheading {
+      font-size: 1.25rem;
+    }
+  }
+
+  .compliance-subheading {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #5a6a85;
+  }
+
+  @media (min-width: 640px) {
+    .compliance-subheading {
+      font-size: 1.125rem;
+    }
+  }
+
+  .platform-card-title {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 1.25rem;
+    line-height: 1.3;
+    letter-spacing: -0.015em;
+    color: #1a1a1a;
+  }
+
+  .platform-card-text {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #4b5563;
+  }
 }
 
 /* Reduced motion */

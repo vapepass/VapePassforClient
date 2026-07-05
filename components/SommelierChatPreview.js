@@ -19,33 +19,33 @@ const messages = [
 export default function SommelierChatPreview() {
   return (
     <div
-      className="w-full max-w-[480px] mx-auto rounded-2xl border border-white/20 bg-[#3b0764]/40 backdrop-blur-xl shadow-[0_16px_48px_rgba(0,0,0,0.24),0_0_0_1px_rgba(255,255,255,0.06)_inset] p-4 sm:p-5 text-left"
+      className="w-full max-w-[380px] sm:max-w-[400px] mx-auto rounded-[28px] border border-[#a78bfa]/25 bg-[#6d28d9]/35 backdrop-blur-xl shadow-[0_20px_56px_rgba(0,0,0,0.22),inset_0_1px_0_rgba(255,255,255,0.08)] p-6 sm:p-7 text-left"
       aria-label="AI Flavor Sommelier chat preview"
     >
-      <div className="flex items-center justify-between mb-3.5">
-        <div className="flex items-center gap-2 min-w-0">
-          <div className="w-7 h-7 rounded-full bg-white/15 flex items-center justify-center shrink-0">
-            <Sparkles size={13} className="text-white" aria-hidden="true" />
+      <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="w-9 h-9 rounded-full border border-white/30 bg-white/10 flex items-center justify-center shrink-0">
+            <Sparkles size={15} className="text-white" aria-hidden="true" />
           </div>
-          <span className="text-white font-semibold text-[13px] sm:text-sm tracking-tight truncate">
+          <span className="text-white font-semibold text-[15px] tracking-tight truncate">
             AI Flavor Sommelier
           </span>
         </div>
         <span
-          className="w-2 h-2 rounded-full bg-emerald-400 shrink-0 shadow-[0_0_6px_rgba(52,211,153,0.6)]"
+          className="w-2.5 h-2.5 rounded-full bg-[#48bb78] shrink-0 shadow-[0_0_8px_rgba(72,187,120,0.55)]"
           aria-hidden="true"
         />
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-3.5">
         {messages.map((message, index) => (
           <div
             key={index}
             className={[
-              'max-w-[90%] px-3 py-2 rounded-xl text-[12px] sm:text-[13px] leading-[1.5] text-white',
+              'max-w-[92%] px-4 py-3 rounded-[20px] text-[14px] leading-[1.55] text-white font-normal',
               message.role === 'user'
-                ? 'ml-auto bg-[#9333ea] shadow-sm'
-                : 'bg-white/[0.1] border border-white/[0.06]',
+                ? 'ml-auto bg-[#805ad5]'
+                : 'bg-white/10 border border-white/[0.08]',
             ].join(' ')}
           >
             {message.text}

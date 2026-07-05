@@ -13,7 +13,7 @@ export default function Logo({ size = 32, showText = false, href = '/', icon = '
         <Icon size={size * 0.55} className="text-white" aria-hidden="true" />
       </div>
       {showText && (
-        <span className="font-bold text-xl text-ink tracking-tight">VapePass</span>
+        <span className="font-bold text-xl text-[#1F2937] tracking-tight">VapePass</span>
       )}
     </>
   );

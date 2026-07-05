@@ -23,12 +23,12 @@ const complianceFeatures = [
 function ComplianceCard({ title, description, icon: Icon, delay = 0 }) {
   return (
     <AnimateIn animation="slide-up" delay={delay}>
-      <article className="h-full rounded-3xl bg-white border border-[#e8e9ef] shadow-[0_4px_24px_rgba(12,12,18,0.04)] p-8 sm:p-9 text-left">
-        <div className="w-11 h-11 rounded-xl bg-emerald-50 flex items-center justify-center mb-5">
-          <Icon size={20} className="text-emerald-600" strokeWidth={2} aria-hidden="true" />
+      <article className="h-full rounded-2xl bg-white border border-[#e8e9ef] shadow-[0_4px_24px_rgba(12,12,18,0.04)] p-6 sm:p-7 text-left">
+        <div className="w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center mb-4">
+          <Icon size={18} className="text-emerald-600" strokeWidth={2} aria-hidden="true" />
         </div>
-        <h3 className="text-lg font-bold text-[#111827] tracking-tight mb-2.5">{title}</h3>
-        <p className="text-[15px] text-[#6b7280] leading-relaxed">{description}</p>
+        <h3 className="text-base font-bold text-[#111827] tracking-tight mb-2">{title}</h3>
+        <p className="text-sm text-[#6b7280] leading-relaxed">{description}</p>
       </article>
     </AnimateIn>
   );
@@ -36,30 +36,32 @@ function ComplianceCard({ title, description, icon: Icon, delay = 0 }) {
 
 export default function ComplianceShield() {
   return (
-    <section className="bg-[#f9fafb] py-20 sm:py-24">
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="text-center mb-12 sm:mb-14">
+    <section className="bg-[#f9fafb] py-14 sm:py-16 font-sans">
+      <div className="max-w-5xl mx-auto px-6">
+        <div className="text-center mb-8 sm:mb-10">
           <AnimateIn animation="slide-up">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-[13px] font-semibold mb-6 bg-emerald-50 border border-emerald-200 text-emerald-700">
-              <ShieldCheck size={14} className="shrink-0" aria-hidden="true" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold mb-4 bg-emerald-50 border border-emerald-200 text-emerald-700">
+              <ShieldCheck size={13} className="shrink-0" aria-hidden="true" />
               Compliance Shield
             </div>
           </AnimateIn>
 
           <AnimateIn animation="slide-up" delay={80}>
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#111827] tracking-tight mb-4">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#111827] tracking-tight mb-3">
               Engineered for TVPA • FDA • Health Canada
             </h2>
           </AnimateIn>
 
           <AnimateIn animation="slide-up" delay={160}>
-            <p className="text-[#6b7280] text-lg leading-relaxed max-w-2xl mx-auto">
-              We&apos;ve baked every regulatory requirement into the platform so you never have to think about it.
+            <p className="compliance-subheading max-w-xl mx-auto">
+              We&apos;ve baked every regulatory requirement into the platform so you
+              <br />
+              never have to think about it.
             </p>
           </AnimateIn>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
           {complianceFeatures.map((feature, index) => (
             <ComplianceCard key={feature.title} {...feature} delay={index * 100} />
           ))}

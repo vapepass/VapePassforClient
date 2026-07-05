@@ -28,23 +28,23 @@ const engines = [
 function EngineCard({ title, accent, icon: Icon, items, delay = 0 }) {
   return (
     <AnimateIn animation="slide-up" delay={delay}>
-      <article className="h-full rounded-3xl bg-white shadow-[0_4px_24px_rgba(12,12,18,0.06)] overflow-hidden">
-        <div className="h-2" style={{ backgroundColor: accent }} aria-hidden="true" />
-        <div className="p-8 sm:p-10">
-          <div className="flex items-center gap-3.5 mb-7">
+      <article className="h-full rounded-2xl bg-white shadow-[0_4px_24px_rgba(12,12,18,0.06)] overflow-hidden">
+        <div className="h-1.5" style={{ backgroundColor: accent }} aria-hidden="true" />
+        <div className="p-6 sm:p-7">
+          <div className="flex items-center gap-3 mb-5">
             <div
-              className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+              className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
               style={{ backgroundColor: accent }}
             >
-              <Icon size={20} className="text-white" aria-hidden="true" />
+              <Icon size={18} className="text-white" aria-hidden="true" />
             </div>
-            <h3 className="text-lg font-bold text-[#111827] tracking-tight">{title}</h3>
+            <h3 className="platform-card-title">{title}</h3>
           </div>
-          <ul className="space-y-4">
+          <ul className="space-y-3">
             {items.map((item) => (
-              <li key={item} className="flex items-start gap-3 text-[15px] text-[#6b7280] leading-relaxed">
+              <li key={item} className="flex items-start gap-2.5 platform-card-text">
                 <Check
-                  size={16}
+                  size={15}
                   className="text-brand-600 flex-shrink-0 mt-0.5"
                   strokeWidth={2.5}
                   aria-hidden="true"
@@ -61,22 +61,24 @@ function EngineCard({ title, accent, icon: Icon, items, delay = 0 }) {
 
 export default function PlatformEngines() {
   return (
-    <section className="bg-[#f9fafb] py-20 sm:py-24">
-      <div className="max-w-5xl mx-auto px-6">
-        <div className="text-center mb-12 sm:mb-14">
+    <section className="bg-[#f9fafb] py-14 sm:py-16 font-sans">
+      <div className="max-w-4xl mx-auto px-6">
+        <div className="text-center mb-8 sm:mb-10">
           <AnimateIn animation="slide-up">
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#111827] tracking-tight mb-4">
+            <h2 className="platform-heading mb-3">
               Two engines. One platform.
             </h2>
           </AnimateIn>
           <AnimateIn animation="slide-up" delay={100}>
-            <p className="text-[#6b7280] text-lg leading-relaxed max-w-2xl mx-auto">
-              Everything a modern vape shop needs — AI recommendations and compliance — unified.
+            <p className="platform-subheading max-w-xl mx-auto">
+              Everything a modern vape shop needs — AI recommendations and
+              <br />
+              compliance — unified.
             </p>
           </AnimateIn>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
           {engines.map((engine, index) => (
             <EngineCard key={engine.title} {...engine} delay={index * 100} />
           ))}
