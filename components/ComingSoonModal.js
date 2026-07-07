@@ -4,11 +4,11 @@ import { useState } from 'react';
 import {
   Check,
   Sparkles,
-  LayoutDashboard,
+  MessageSquare,
+  ShieldCheck,
   BarChart3,
-  Gift,
-  Smartphone,
-  Stamp,
+  Boxes,
+  LayoutDashboard,
 } from 'lucide-react';
 import Modal from '@/components/ui/Modal';
 import Button from '@/components/ui/Button';
@@ -17,17 +17,17 @@ import { Input, FormField } from '@/components/ui/Input';
 const WAITLIST_KEY = 'vapepass_waitlist';
 
 const features = [
+  { icon: MessageSquare, label: 'AI Flavor Sommelier' },
+  { icon: ShieldCheck, label: 'Compliance Engine' },
+  { icon: Boxes, label: 'Live Inventory Sync' },
   { icon: LayoutDashboard, label: 'Store Dashboard' },
   { icon: BarChart3, label: 'Customer Analytics' },
-  { icon: Gift, label: 'Loyalty Program Management' },
-  { icon: Smartphone, label: 'Wallet Integration' },
-  { icon: Stamp, label: 'Rewards Tracking' },
 ];
 
 const timeline = [
   { icon: '🚧', label: 'Merchant Portal', status: 'Coming Soon' },
   { icon: '🚧', label: 'Customer Accounts', status: 'Coming Soon' },
-  { icon: '🔨', label: 'Wallet Pass Management', status: 'In Development' },
+  { icon: '🔨', label: 'AI Recommendations (Beta)', status: 'In Development' },
   { icon: '🚧', label: 'Analytics Dashboard', status: 'Coming Soon' },
 ];
 
