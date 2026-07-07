@@ -4,9 +4,10 @@ import Link from 'next/link';
 import { ArrowRight, Sparkles, ChevronLeft } from 'lucide-react';
 import Logo from '@/components/Logo';
 import Button from '@/components/ui/Button';
-import { useComingSoon } from '@/components/ComingSoonProvider';
 export default function DemoTour() {
-  const { openComingSoon } = useComingSoon();
+  const goToPricing = () => {
+    window.location.href = '/#pricing-form';
+  };
 
   return (
     <div className="min-h-screen gradient-mesh flex flex-col">
@@ -14,7 +15,7 @@ export default function DemoTour() {
         <nav className="container-app flex items-center justify-between h-16 max-w-5xl" aria-label="Demo navigation">
           <Logo size={32} showText href="/" />
           <div className="flex items-center gap-3">
-            <Button onClick={openComingSoon} size="sm">
+            <Button onClick={goToPricing} size="sm">
               Get Started
             </Button>
           </div>
@@ -44,10 +45,10 @@ export default function DemoTour() {
               Give every customer personalized flavor recommendations — compliant by design and built for vape retail.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-7">
-              <Button onClick={openComingSoon} size="lg">
+              <Button onClick={goToPricing} size="lg">
                 Get Started <ArrowRight size={18} />
               </Button>
-              <Button as="a" href="mailto:hello@vapepass.com?subject=Book%20a%20Demo" variant="secondary" size="lg">
+              <Button onClick={goToPricing} variant="secondary" size="lg">
                 Book a Demo
               </Button>
             </div>

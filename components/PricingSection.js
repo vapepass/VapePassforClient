@@ -1,8 +1,7 @@
 'use client';
 import { useState } from 'react';
-import { Check, ArrowRight, Calendar } from 'lucide-react';
+import { Check, ArrowRight, Loader2 } from 'lucide-react';
 import AnimateIn from '@/components/AnimateIn';
-import { useComingSoon } from '@/components/ComingSoonProvider';
 
 const planFeatures = [
   'AI Flavor Sommelier',
@@ -20,11 +19,63 @@ const initialForm = {
   startDate: '',
 };
 
-function PricingField({ id, label, type = 'text', value, onChange, placeholder, showCalendar = false }) {
+const emptyForm = {
+  storeName: '',
+  ownerName: '',
+  phone: '',
+  startDate: '',
+};
+
+function validateForm(form) {
+  const errors = {};
+
+  if (!form.storeName.trim()) {
+    errors.storeName = 'Store name is required.';
+  }
+
+  if (!form.ownerName.trim()) {
+    errors.ownerName = "Owner's name is required.";
+  }
+
+  if (!form.phone.trim()) {
+    errors.phone = 'Phone number is required.';
+  } else if (!/^[\d\s()+\-.]{7,}$/.test(form.phone.trim())) {
+    errors.phone = 'Enter a valid phone number.';
+  }
+
+  if (!form.startDate.trim()) {
+    errors.startDate = 'Start date is required.';
+  } else if (
+    !/^\d{4}-\d{2}-\d{2}$/.test(form.startDate)
+    || Number.isNaN(new Date(`${form.startDate}T00:00:00`).getTime())
+  ) {
+    errors.startDate = 'Please select a valid date.';
+  }
+
+  return errors;
+}
+
+function formatDateForSheet(isoDate) {
+  const [year, month, day] = isoDate.split('-');
+  return `${day}/${month}/${year}`;
+}
+
+function PricingField({
+  id,
+  label,
+  type = 'text',
+  value,
+  onChange,
+  placeholder,
+  min,
+  error,
+  required = false,
+}) {
   return (
     <div>
       <label htmlFor={id} className="block text-sm text-[#6b7280] mb-2">
         {label}
+        {required ? <span className="text-brand-600"> *</span> : null}
       </label>
       <div className="relative">
         <input
@@ -33,35 +84,107 @@ function PricingField({ id, label, type = 'text', value, onChange, placeholder, 
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className="w-full h-11 px-4 text-[15px] text-[#111827] bg-white border border-[#e5e7eb] rounded-lg placeholder:text-[#9ca3af] focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/15 transition-all"
+          min={min}
+          required={required}
+          aria-invalid={Boolean(error)}
+          aria-describedby={error ? `${id}-error` : undefined}
+          className={[
+            'w-full h-11 px-4 text-[15px] text-[#111827] bg-white border rounded-lg placeholder:text-[#9ca3af] focus:outline-none focus:ring-2 focus:ring-brand-500/15 transition-all',
+            type === 'date' ? '[color-scheme:light]' : '',
+            error
+              ? 'border-red-300 focus:border-red-400'
+              : 'border-[#e5e7eb] focus:border-brand-500',
+          ].join(' ')}
         />
-        {showCalendar && (
-          <Calendar
-            size={16}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#9ca3af] pointer-events-none"
-            aria-hidden="true"
-          />
-        )}
       </div>
+      {error ? (
+        <p id={`${id}-error`} className="mt-1.5 text-xs text-red-600">
+          {error}
+        </p>
+      ) : null}
     </div>
   );
 }
 
 export default function PricingSection() {
-  const { openComingSoon } = useComingSoon();
   const [form, setForm] = useState(initialForm);
+  const [fieldErrors, setFieldErrors] = useState({});
+  const [status, setStatus] = useState('idle');
+  const [message, setMessage] = useState('');
+
+  const webAppUrl = process.env.NEXT_PUBLIC_GOOGLE_SHEETS_WEB_APP_URL;
 
   const handleChange = (field) => (event) => {
     setForm((current) => ({ ...current, [field]: event.target.value }));
+    setFieldErrors((current) => {
+      if (!current[field]) return current;
+      const next = { ...current };
+      delete next[field];
+      return next;
+    });
+    if (status === 'error') {
+      setStatus('idle');
+      setMessage('');
+    }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    openComingSoon();
+
+    const errors = validateForm(form);
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      setStatus('error');
+      setMessage('Please fill in all required fields.');
+      return;
+    }
+
+    if (!webAppUrl) {
+      setStatus('error');
+      setMessage('Form submission is not configured. Please contact support.');
+      return;
+    }
+
+    setFieldErrors({});
+    setStatus('loading');
+    setMessage('');
+
+    try {
+      const response = await fetch(webAppUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          storeName: form.storeName.trim(),
+          ownerName: form.ownerName.trim(),
+          phone: form.phone.trim(),
+          startDate: formatDateForSheet(form.startDate.trim()),
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || 'Submission failed. Please try again.');
+      }
+
+      setForm(emptyForm);
+      setStatus('success');
+      setMessage('Thanks! Your information has been submitted successfully.');
+    } catch (error) {
+      setStatus('error');
+      setMessage(
+        error instanceof Error
+          ? error.message
+          : 'Something went wrong. Please try again.',
+      );
+    }
   };
+
+  const isSubmitting = status === 'loading';
+  const today = new Date().toISOString().split('T')[0];
 
   return (
-    <section className="py-20 sm:py-24 bg-[#f9fafb] font-sans">
+    <section id="pricing" className="py-20 sm:py-24 bg-[#f9fafb] font-sans">
       <div className="max-w-[640px] mx-auto px-6">
         <div className="text-center mb-12">
           <AnimateIn animation="slide-up">
@@ -97,7 +220,7 @@ export default function PricingSection() {
               </ul>
             </div>
 
-            <form onSubmit={handleSubmit} className="border-t border-[#e8e9ef] px-8 py-7">
+            <form id="pricing-form" onSubmit={handleSubmit} className="border-t border-[#e8e9ef] px-8 py-7" noValidate>
               <h3 className="text-base font-bold text-[#111827] mb-5 tracking-tight">
                 Get started — fill out your info
               </h3>
@@ -108,12 +231,16 @@ export default function PricingSection() {
                   label="Store Name"
                   value={form.storeName}
                   onChange={handleChange('storeName')}
+                  error={fieldErrors.storeName}
+                  required
                 />
                 <PricingField
                   id="ownerName"
                   label="Owner's Name"
                   value={form.ownerName}
                   onChange={handleChange('ownerName')}
+                  error={fieldErrors.ownerName}
+                  required
                 />
                 <PricingField
                   id="phone"
@@ -121,23 +248,50 @@ export default function PricingSection() {
                   type="tel"
                   value={form.phone}
                   onChange={handleChange('phone')}
+                  error={fieldErrors.phone}
+                  required
                 />
                 <PricingField
                   id="startDate"
                   label="When do you want to start?"
+                  type="date"
                   value={form.startDate}
                   onChange={handleChange('startDate')}
-                  placeholder="dd/mm/yyyy"
-                  showCalendar
+                  min={today}
+                  error={fieldErrors.startDate}
+                  required
                 />
               </div>
 
+              {message ? (
+                <p
+                  role="status"
+                  aria-live="polite"
+                  className={[
+                    'mb-4 text-sm leading-relaxed',
+                    status === 'success' ? 'text-emerald-600' : 'text-red-600',
+                  ].join(' ')}
+                >
+                  {message}
+                </p>
+              ) : null}
+
               <button
                 type="submit"
-                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 text-[15px] font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-full transition-colors"
+                disabled={isSubmitting}
+                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 text-[15px] font-semibold text-white bg-brand-600 hover:bg-brand-700 rounded-full transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                Get Started — $100/mo
-                <ArrowRight size={16} aria-hidden="true" />
+                {isSubmitting ? (
+                  <>
+                    <Loader2 size={16} className="animate-spin" aria-hidden="true" />
+                    Submitting...
+                  </>
+                ) : (
+                  <>
+                    Get Started — $100/mo
+                    <ArrowRight size={16} aria-hidden="true" />
+                  </>
+                )}
               </button>
             </form>
           </div>

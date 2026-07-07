@@ -10,12 +10,16 @@ import PlatformEngines from '@/components/PlatformEngines';
 import ComplianceShield from '@/components/ComplianceShield';
 import SommelierFeature from '@/components/SommelierFeature';
 import PricingSection from '@/components/PricingSection';
-import { useComingSoon } from '@/components/ComingSoonProvider';
 
 export default function Landing() {
-  const { openComingSoon } = useComingSoon();
   const platformSectionRef = useRef(null);
   const [headerSolid, setHeaderSolid] = useState(false);
+
+  const scrollToPricingForm = () => {
+    const el = document.getElementById('pricing-form') || document.getElementById('pricing');
+    if (!el) return;
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   useEffect(() => {
     const target = platformSectionRef.current;
@@ -39,8 +43,8 @@ export default function Landing() {
     <div className="min-h-screen bg-white">
       <LandingHeader
         solid={headerSolid}
-        onSignIn={openComingSoon}
-        onGetStarted={openComingSoon}
+        onSignIn={scrollToPricingForm}
+        onGetStarted={scrollToPricingForm}
       />
 
       {/* Hero */}
@@ -76,7 +80,7 @@ export default function Landing() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 mb-10 sm:mb-12">
               <button
                 type="button"
-                onClick={openComingSoon}
+                onClick={scrollToPricingForm}
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-semibold text-[#4c1d95] bg-white hover:bg-white/95 rounded-full transition-colors shadow-md min-w-[180px]"
               >
                 Start Free Trial <ArrowRight size={15} aria-hidden="true" />
