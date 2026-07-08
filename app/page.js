@@ -1,11 +1,12 @@
 'use client';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, ChevronRight, Sparkles } from 'lucide-react';
+import { ArrowRight, ChevronRight, Sparkles, X } from 'lucide-react';
 import AnimateIn from '@/components/AnimateIn';
 import LandingHeader from '@/components/LandingHeader';
 import Logo from '@/components/Logo';
 import SommelierChatPreview from '@/components/SommelierChatPreview';
+import SommelierChatWidget from '@/components/SommelierChatWidget';
 import PlatformEngines from '@/components/PlatformEngines';
 import ComplianceShield from '@/components/ComplianceShield';
 import SommelierFeature from '@/components/SommelierFeature';
@@ -14,6 +15,7 @@ import PricingSection from '@/components/PricingSection';
 export default function Landing() {
   const platformSectionRef = useRef(null);
   const [headerSolid, setHeaderSolid] = useState(false);
+  const [chatOpen, setChatOpen] = useState(false);
 
   const scrollToPricingForm = () => {
     const el = document.getElementById('pricing-form') || document.getElementById('pricing');
@@ -102,14 +104,23 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Floating action button */}
-      <Link
-        href="/demo"
+      {/* Chatbot widget */}
+      <SommelierChatWidget
+        open={chatOpen}
+        onClose={() => setChatOpen(false)}
+        onMinimize={() => setChatOpen(false)}
+      />
+
+      {/* Floating action button — opens chatbot (no redirect) */}
+      <button
+        type="button"
+        onClick={() => setChatOpen((current) => !current)}
         className="fixed bottom-6 right-6 z-50 flex items-center justify-center w-14 h-14 rounded-full bg-brand-600 hover:bg-brand-700 text-white shadow-brand transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-        aria-label="Try the Sommelier"
+        aria-label={chatOpen ? 'Close Flavor Sommelier chat' : 'Open Flavor Sommelier chat'}
+        aria-expanded={chatOpen}
       >
-        <Sparkles size={22} aria-hidden="true" />
-      </Link>
+        {chatOpen ? <X size={22} aria-hidden="true" /> : <Sparkles size={22} aria-hidden="true" />}
+      </button>
 
       <div ref={platformSectionRef}>
         <PlatformEngines />
