@@ -127,15 +127,38 @@ export default function SommelierChatWidget({ open, onClose, onMinimize }) {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [ageGateActive, setAgeGateActive] = useState(true);
+  const [ended, setEnded] = useState(false);
+  const [isExiting, setIsExiting] = useState(false);
   const listRef = useRef(null);
   const inputRef = useRef(null);
   const typingTimeoutRef = useRef(null);
+  const closeTimeoutRef = useRef(null);
+  const resetTimeoutRef = useRef(null);
 
   useEffect(() => {
     if (!open) return;
     const timer = setTimeout(() => inputRef.current?.focus(), 280);
     return () => clearTimeout(timer);
   }, [open, ageGateActive]);
+
+  useEffect(() => {
+    // Keep content visible during exit transition, then reset state so next open starts fresh.
+    if (open) {
+      setIsExiting(false);
+      return;
+    }
+
+    if (resetTimeoutRef.current) clearTimeout(resetTimeoutRef.current);
+    setIsExiting(true);
+    resetTimeoutRef.current = setTimeout(() => {
+      setMessages([OPENING_MESSAGE]);
+      setInput('');
+      setIsTyping(false);
+      setAgeGateActive(true);
+      setEnded(false);
+      setIsExiting(false);
+    }, 280);
+  }, [open]);
 
   useEffect(() => {
     if (!listRef.current) return;
@@ -148,6 +171,8 @@ export default function SommelierChatWidget({ open, onClose, onMinimize }) {
   useEffect(() => {
     return () => {
       if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+      if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
+      if (resetTimeoutRef.current) clearTimeout(resetTimeoutRef.current);
     };
   }, []);
 
@@ -191,7 +216,7 @@ export default function SommelierChatWidget({ open, onClose, onMinimize }) {
 
   const sendMessage = (rawText) => {
     const text = rawText.trim();
-    if (!text || isTyping) return;
+    if (!text || isTyping || ended) return;
 
     setMessages((current) => [
       ...current,
@@ -211,25 +236,50 @@ export default function SommelierChatWidget({ open, onClose, onMinimize }) {
   };
 
   const handleAgeYes = () => {
-    if (isTyping) return;
+    if (isTyping || ended) return;
     setAgeGateActive(false);
     sendMessage("Yes, I'm 19+");
   };
 
   const handleAgeNo = () => {
-    if (isTyping) return;
-    setAgeGateActive(false);
-    sendMessage('No');
-  };
+    if (isTyping || ended) return;
 
-  if (!open) return null;
+    // Required behavior:
+    // - Show message immediately
+    // - Wait 2–3 seconds
+    // - Auto close + reset
+    setEnded(true);
+    setAgeGateActive(false);
+    if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+    setIsTyping(false);
+
+    setMessages((current) => [
+      ...current,
+      {
+        id: `bot-end-${Date.now()}`,
+        role: 'bot',
+        text: 'VapePass Assistant is only available to persons 19 years of age or older in British Columbia. This conversation has ended.',
+      },
+    ]);
+
+    if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
+    closeTimeoutRef.current = setTimeout(() => {
+      onClose?.();
+    }, 2500);
+  };
 
   return (
     <div
-      className="fixed bottom-24 right-4 sm:right-6 z-[60] w-[calc(100vw-2rem)] max-w-[380px] sommelier-chat-panel"
+      className={[
+        'fixed bottom-24 right-4 sm:right-6 z-[60] w-[calc(100vw-2rem)] max-w-[380px] sommelier-chat-panel',
+        open && !isExiting
+          ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto'
+          : 'opacity-0 translate-y-4 scale-[0.985] pointer-events-none',
+      ].join(' ')}
       role="dialog"
       aria-label="AI Flavor Sommelier chatbot"
       aria-modal="false"
+      aria-hidden={open ? 'false' : 'true'}
     >
       <div className="flex flex-col h-[min(560px,70vh)] rounded-3xl overflow-hidden bg-white shadow-[0_20px_50px_rgba(12,12,18,0.22)] border border-[#e8e9ef]">
         {/* Header */}
@@ -302,7 +352,7 @@ export default function SommelierChatWidget({ open, onClose, onMinimize }) {
         </div>
 
         {/* Age gate buttons (first step) */}
-        {ageGateActive && !isTyping ? (
+        {ageGateActive && !isTyping && !ended ? (
           <div className="px-3.5 pb-3 pt-1 bg-[#fafafa] border-t border-[#f0f1f5] shrink-0">
             <div className="flex gap-2">
               <button
@@ -321,7 +371,7 @@ export default function SommelierChatWidget({ open, onClose, onMinimize }) {
               </button>
             </div>
           </div>
-        ) : (
+        ) : !ended ? (
           <form
             onSubmit={handleSubmit}
             className="px-3.5 py-3 bg-white border-t border-[#e8e9ef] shrink-0"
@@ -333,13 +383,13 @@ export default function SommelierChatWidget({ open, onClose, onMinimize }) {
                 value={input}
                 onChange={(event) => setInput(event.target.value)}
                 placeholder="Type your message..."
-                disabled={isTyping}
+                disabled={isTyping || ended}
                 className="flex-1 h-11 px-4 text-sm text-[#111827] bg-[#f9fafb] border border-[#e5e7eb] rounded-full placeholder:text-[#9ca3af] focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/15 transition-all disabled:opacity-60"
                 aria-label="Chat message"
               />
               <button
                 type="submit"
-                disabled={!input.trim() || isTyping}
+                disabled={!input.trim() || isTyping || ended}
                 className="w-11 h-11 rounded-full bg-brand-600 hover:bg-brand-700 text-white flex items-center justify-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
                 aria-label="Send message"
               >
@@ -347,7 +397,7 @@ export default function SommelierChatWidget({ open, onClose, onMinimize }) {
               </button>
             </div>
           </form>
-        )}
+        ) : null}
       </div>
     </div>
   );
