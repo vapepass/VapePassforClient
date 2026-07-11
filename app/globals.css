@@ -271,6 +271,48 @@ body {
     animation: sommelier-chat-fade-in 0.28s ease-out;
   }
 
+  .sommelier-chat-bubble-user {
+    box-shadow: 0 4px 14px rgba(124, 58, 237, 0.28);
+  }
+
+  .sommelier-chat-bubble-bot {
+    box-shadow: var(--shadow-xs);
+  }
+
+  .sommelier-chat-option-btn {
+    animation: sommelier-chat-slide-up 0.32s var(--ease-out) both;
+  }
+
+  .sommelier-chat-cta {
+    animation: sommelier-chat-slide-up 0.36s var(--ease-out) both;
+  }
+
+  .sommelier-product-card {
+    animation: sommelier-chat-slide-up 0.4s var(--ease-out) both;
+    transition: transform 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out);
+  }
+
+  .sommelier-product-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .sommelier-chat-disclaimer {
+    animation: sommelier-chat-fade-in 0.3s ease-out both;
+  }
+
+  .sommelier-chat-avatar {
+    animation: pulse-ring 2.4s ease-in-out infinite;
+  }
+
+  .sommelier-chat-scroll {
+    scroll-behavior: smooth;
+  }
+
+  .sommelier-session-locked {
+    animation: sommelier-chat-slide-up 0.32s var(--ease-out) both;
+  }
+
   @keyframes sommelier-chat-slide-up {
     from {
       opacity: 0;
