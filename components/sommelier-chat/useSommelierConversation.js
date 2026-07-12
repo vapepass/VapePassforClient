@@ -13,7 +13,6 @@ import {
   NICOTINE_DISCLAIMER,
   SUB_OPTIONS,
   TYPED_MESSAGE_FALLBACK,
-  WELCOME_MESSAGE,
   getAddToCartSuccessMessage,
   getFinalAgeConfirmMessage,
   getFlavorCategoryMessage,
@@ -21,6 +20,12 @@ import {
   getProductRecommendation,
   getRecommendationPrompt,
 } from './conversation';
+import {
+  INITIAL_CONVERSATION_STATE,
+  clearPersistedConversation,
+  loadPersistedConversation,
+  persistConversation,
+} from './conversationPersistence';
 
 const TYPING_DELAY_MS = 900;
 
@@ -85,20 +90,12 @@ function matchOptionFromText(text, options) {
   });
 }
 
-const INITIAL_STATE = {
-  step: CONVERSATION_STEPS.WELCOME,
-  messages: [WELCOME_MESSAGE],
-  selections: { category: null, subOption: null, cooling: null },
-  product: null,
-  isTyping: false,
-  ended: false,
-  sessionLocked: false,
-  cartAdded: false,
-  isExiting: false,
-};
+const INITIAL_STATE = INITIAL_CONVERSATION_STATE;
 
-export default function useSommelierConversation({ open, onClose }) {
-  const [state, setState] = useState(INITIAL_STATE);
+export default function useSommelierConversation({ open }) {
+  const [state, setState] = useState(
+    () => loadPersistedConversation() ?? INITIAL_STATE,
+  );
   const typingTimeoutRef = useRef(null);
   const resetTimeoutRef = useRef(null);
 
@@ -121,23 +118,33 @@ export default function useSommelierConversation({ open, onClose }) {
     }));
   }, [clearTimers]);
 
-  const resetConversation = useCallback(() => {
-    setState(INITIAL_STATE);
-  }, []);
-
   useEffect(() => {
     if (open) {
       setState((current) => ({ ...current, isExiting: false }));
       return;
     }
 
-    if (resetTimeoutRef.current) clearTimeout(resetTimeoutRef.current);
     setState((current) => ({ ...current, isExiting: true }));
 
+    if (resetTimeoutRef.current) clearTimeout(resetTimeoutRef.current);
     resetTimeoutRef.current = setTimeout(() => {
-      resetConversation();
+      setState((current) => {
+        if (current.sessionLocked) {
+          clearPersistedConversation();
+          return INITIAL_STATE;
+        }
+        return { ...current, isExiting: false };
+      });
     }, 280);
-  }, [open, resetConversation]);
+
+    return () => {
+      if (resetTimeoutRef.current) clearTimeout(resetTimeoutRef.current);
+    };
+  }, [open]);
+
+  useEffect(() => {
+    persistConversation(state);
+  }, [state]);
 
   useEffect(() => () => clearTimers(), [clearTimers]);
 

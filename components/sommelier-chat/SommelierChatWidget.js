@@ -31,7 +31,7 @@ export default function SommelierChatWidget({ open, onClose, onMinimize }) {
     handleOptionSelect,
     handleTypedMessage,
     handleAddToCart,
-  } = useSommelierConversation({ open, onClose });
+  } = useSommelierConversation({ open });
 
   const showAgeGateButtons = activeOptions.length > 0 && isAgeGateStep(step);
   const showChoiceRowButtons =
@@ -47,11 +47,18 @@ export default function SommelierChatWidget({ open, onClose, onMinimize }) {
   }, [open, ended, sessionLocked, showTextInput, activeOptions.length]);
 
   useEffect(() => {
-    if (!listRef.current) return;
-    listRef.current.scrollTo({
-      top: listRef.current.scrollHeight,
-      behavior: sessionLocked ? 'auto' : 'smooth',
-    });
+    if (!open || !listRef.current) return;
+
+    const scrollToLatest = () => {
+      listRef.current?.scrollTo({
+        top: listRef.current.scrollHeight,
+        behavior: 'auto',
+      });
+    };
+
+    scrollToLatest();
+    const timer = setTimeout(scrollToLatest, 320);
+    return () => clearTimeout(timer);
   }, [messages, isTyping, showProductCard, showAddToCart, sessionLocked, open]);
 
   const handleSubmit = (event) => {
