@@ -13,7 +13,6 @@ import {
   NICOTINE_DISCLAIMER,
   SUB_OPTIONS,
   TYPED_MESSAGE_FALLBACK,
-  UNDERAGE_END_MESSAGE,
   WELCOME_MESSAGE,
   getAddToCartSuccessMessage,
   getFinalAgeConfirmMessage,
@@ -24,8 +23,6 @@ import {
 } from './conversation';
 
 const TYPING_DELAY_MS = 900;
-const AUTO_CLOSE_DELAY_MS = 3000;
-const AGE_DENIAL_CLOSE_DELAY_MS = 2500;
 
 function createMessage(role, text, extra = {}) {
   const safeText = typeof text === 'string' ? text : String(text ?? '');
@@ -103,36 +100,11 @@ const INITIAL_STATE = {
 export default function useSommelierConversation({ open, onClose }) {
   const [state, setState] = useState(INITIAL_STATE);
   const typingTimeoutRef = useRef(null);
-  const closeTimeoutRef = useRef(null);
   const resetTimeoutRef = useRef(null);
 
   const clearTimers = useCallback(() => {
     if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
-    if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
   }, []);
-
-  const endConversation = useCallback(
-    (onComplete) => {
-      clearTimers();
-      setState((current) => ({
-        ...current,
-        step: CONVERSATION_STEPS.ENDED,
-        ended: true,
-        sessionLocked: false,
-        isTyping: false,
-        messages: [
-          ...current.messages,
-          createMessage('bot', UNDERAGE_END_MESSAGE),
-        ],
-      }));
-
-      closeTimeoutRef.current = setTimeout(() => {
-        onComplete?.();
-        onClose?.();
-      }, AGE_DENIAL_CLOSE_DELAY_MS);
-    },
-    [clearTimers, onClose],
-  );
 
   const lockSession = useCallback(() => {
     clearTimers();
@@ -147,11 +119,7 @@ export default function useSommelierConversation({ open, onClose }) {
         createMessage('bot', COMPLIANCE_LOCK_MESSAGE),
       ],
     }));
-
-    closeTimeoutRef.current = setTimeout(() => {
-      onClose?.();
-    }, AUTO_CLOSE_DELAY_MS);
-  }, [clearTimers, onClose]);
+  }, [clearTimers]);
 
   const resetConversation = useCallback(() => {
     setState(INITIAL_STATE);
@@ -221,9 +189,9 @@ export default function useSommelierConversation({ open, onClose }) {
     (userLabel = 'No') => {
       if (isInteractionBlocked) return;
       pushUserMessage(userLabel);
-      endConversation();
+      lockSession();
     },
-    [endConversation, isInteractionBlocked, pushUserMessage],
+    [isInteractionBlocked, lockSession, pushUserMessage],
   );
 
   const proceedFlavorSelect = useCallback(
@@ -306,9 +274,9 @@ export default function useSommelierConversation({ open, onClose }) {
     (userLabel = 'No') => {
       if (isInteractionBlocked) return;
       pushUserMessage(userLabel);
-      endConversation();
+      lockSession();
     },
-    [endConversation, isInteractionBlocked, pushUserMessage],
+    [isInteractionBlocked, lockSession, pushUserMessage],
   );
 
   const proceedAddToCart = useCallback(
